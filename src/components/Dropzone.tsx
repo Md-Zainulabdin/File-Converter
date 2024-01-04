@@ -1,11 +1,4 @@
-import React from "react";
-import ReactDropzone from "react-dropzone";
-import { useState, useEffect, useRef } from "react";
-
-// ui components
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "@/components/ui/use-toast";
-import { Badge } from "./ui/badge";
+"use client";
 
 // icons
 import { IoCloudUploadOutline } from "react-icons/io5";
@@ -15,22 +8,33 @@ import { ImSpinner3 } from "react-icons/im";
 import { LuFileSymlink } from "react-icons/lu";
 import { HiOutlineDownload } from "react-icons/hi";
 
+import React, { useState, useEffect, useRef } from "react";
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+
+// ui components
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
+
 // types
 import { Action } from "@/app/types";
-
-// utils
-import fileToIcon from "@/utils/file-to-icon";
-import compressFileName from "@/utils/compress-filename";
-import bytesToSize from "@/utils/byte-to-size";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Button } from "./ui/button";
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+
+// utils
+import fileToIcon from "@/utils/file-to-icon";
+import compressFileName from "@/utils/compress-filename";
+import bytesToSize from "@/utils/byte-to-size";
+import convertFile from "@/utils/convert";
+import ReactDropzone from "react-dropzone";
+import loadFfmpeg from "@/utils/load-ffmpeg";
 
 // file extensions
 const extensions = {
@@ -70,26 +74,27 @@ const extensions = {
 };
 
 const Dropzone = () => {
+
+  const ffmpegRef = useRef<any>(null);
   const [isHover, setIsHover] = useState<boolean>(false);
   const [files, setFiles] = useState<Array<any>>([]);
   const [actions, setActions] = useState<Action[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [defaultValues, setDefaultValues] = useState<string>("video");
   const [selcted, setSelected] = useState<string>("...");
-  const [is_done, setIsDone] = useState<boolean>(false);
-  const [is_converting, setIsConverting] = useState<boolean>(false);
-  const [is_ready, setIsReady] = useState<boolean>(false);
+  const [isDone, setIsDone] = useState<boolean>(false);
+  const [isCoverting, setIsConverting] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState<boolean>(false);
 
-
-
-   // functions
-   const reset = () => {
+  // functions
+  const reset = () => {
     setIsDone(false);
     setActions([]);
     setFiles([]);
     setIsReady(false);
     setIsConverting(false);
   };
+
   const downloadAll = (): void => {
     for (let action of actions) {
       !action.is_error && download(action);
@@ -155,48 +160,64 @@ const Dropzone = () => {
     );
   };
 
-//   const convert = async (): Promise<any> => {
-//     let tmp_actions = actions.map((elt) => ({
-//       ...elt,
-//       is_converting: true,
-//     }));
-//     setActions(tmp_actions);
-//     setIsConverting(true);
-//     for (let action of tmp_actions) {
-//       try {
-//         const { url, output } = await convertFile(ffmpegRef.current, action);
-//         tmp_actions = tmp_actions.map((elt) =>
-//           elt === action
-//             ? {
-//                 ...elt,
-//                 is_converted: true,
-//                 is_converting: false,
-//                 url,
-//                 output,
-//               }
-//             : elt
-//         );
-//         setActions(tmp_actions);
-//       } catch (err) {
-//         tmp_actions = tmp_actions.map((elt) =>
-//           elt === action
-//             ? {
-//                 ...elt,
-//                 is_converted: false,
-//                 is_converting: false,
-//                 is_error: true,
-//               }
-//             : elt
-//         );
-//         setActions(tmp_actions);
-//       }
-//     }
-//     setIsDone(true);
-//     setIsConverting(false);
-//   };
+  const convert = async (): Promise<any> => {
+    let tmp_actions = actions.map((elt) => ({
+      ...elt,
+      isCoverting: true,
+    }));
+    setActions(tmp_actions);
+    setIsConverting(true);
+    for (let action of tmp_actions) {
+      try {
+        const { url, output } = await convertFile(ffmpegRef.current, action);
+
+        console.log(output);
+        
+        tmp_actions = tmp_actions.map((elt) =>
+          elt === action
+            ? {
+                ...elt,
+                is_converted: true,
+                isCoverting: false,
+                url,
+                output,
+              }
+            : elt
+        );
+        setActions(tmp_actions);
+      } catch (err) {
+        tmp_actions = tmp_actions.map((elt) =>
+          elt === action
+            ? {
+                ...elt,
+                is_converted: false,
+                isCoverting: false,
+                is_error: true,
+              }
+            : elt
+        );
+        setActions(tmp_actions);
+      }
+    }
+    setIsDone(true);
+    setIsConverting(false);
+  };
 
   const handleHover = (): void => setIsHover(true);
   const handleExitHover = (): void => setIsHover(false);
+  const checkIsReady = (): void => {
+    let tmp_is_ready = true;
+    actions.forEach((action: Action) => {
+      if (!action.to) tmp_is_ready = false;
+    });
+    setIsReady(tmp_is_ready);
+  };
+
+  const load = async () => {
+    const ffmpeg_response: FFmpeg = await loadFfmpeg();
+    ffmpegRef.current = ffmpeg_response;
+    setIsLoaded(true);
+  };
 
   const accepted_files = {
     "image/*": [
@@ -215,6 +236,18 @@ const Dropzone = () => {
     "audio/*": [],
     "video/*": [],
   };
+
+  useEffect(() => {
+    if (!actions.length) {
+      setIsDone(false);
+      setFiles([]);
+      setIsReady(false);
+      setIsConverting(false);
+    } else checkIsReady();
+  }, [actions]);
+  useEffect(() => {
+    load();
+  }, []);
 
   if (actions.length) {
     return (
@@ -253,7 +286,7 @@ const Dropzone = () => {
                 <span>Done</span>
                 <MdDone />
               </Badge>
-            ) : action.is_converting ? (
+            ) : action.isCoverting ? (
               <Badge variant="default" className="flex gap-2">
                 <span>Converting</span>
                 <span className="animate-spin">
@@ -356,7 +389,7 @@ const Dropzone = () => {
         ))}
 
         <div className="flex w-full justify-end">
-          {is_done ? (
+          {isDone ? (
             <div className="space-y-4 w-fit">
               <Button
                 size="lg"
@@ -378,11 +411,11 @@ const Dropzone = () => {
           ) : (
             <Button
               size="lg"
-              disabled={!is_ready || is_converting}
+              disabled={!isReady || isCoverting}
               className="rounded-xl font-semibold relative py-4 text-md flex items-center w-44"
-            //   onClick={convert}
+                onClick={convert}
             >
-              {is_converting ? (
+              {isCoverting ? (
                 <span className="animate-spin text-lg">
                   <ImSpinner3 />
                 </span>

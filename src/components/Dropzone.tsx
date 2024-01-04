@@ -262,7 +262,7 @@ const Dropzone = () => {
             )}
 
             <div className="flex gap-4 items-center">
-              <span className="text-2xl text-orange-600">
+              <span className="text-2xl text-indigo-500">
                 {fileToIcon(action.file_type)}
               </span>
 
@@ -459,7 +459,7 @@ const Dropzone = () => {
       {({ getRootProps, getInputProps }) => (
         <div
           {...getRootProps()}
-          className="bg-gray-50 h-72 lg:h-80 xl:h-96 rounded-3xl shadow-sm border border-dashed cursor-pointer flex items-center justify-center"
+          className="bg-gray-50 h-72 lg:h-80 xl:h-96 rounded-2xl shadow-sm border border-dashed cursor-pointer flex items-center justify-center"
         >
           <input {...getInputProps()} />
           <div className="space-y-4 text-gray-500">
@@ -468,7 +468,7 @@ const Dropzone = () => {
                 <div className="flex justify-center text-6xl">
                   <LuFileSymlink />
                 </div>
-                <h3 className="text-2xl text-center font-medium">
+                <h3 className="text-xl md:text-2xl text-center font-medium">
                   Yes, right there
                 </h3>
               </>
@@ -477,7 +477,7 @@ const Dropzone = () => {
                 <div className="flex justify-center text-6xl">
                   <IoCloudUploadOutline />
                 </div>
-                <h3 className="text-2xl text-center font-medium">
+                <h3 className="text-xl md:text-2xl text-center font-medium">
                   Click, or drop your files here
                 </h3>
               </>

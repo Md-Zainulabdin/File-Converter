@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster"
-import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
+import NextUiProvider from "@/providers/NextUiProvider";
+import NextNavbar from "@/components/nextui-navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Modifio - Free Unlimited File Converter",
-  description: `Unleash your creativity with Modifio – the ultimate online tool for
+  title: "ConvertifyX - Free Unlimited File Converter",
+  description: `Unleash your creativity with ConvertifyX – the ultimate online tool for
   unlimited and free multimedia conversion. Transform images, audio, and
   videos effortlessly, without restrictions. Start converting now and
   elevate your content like never before!`,
-  creator: "Muhammad Zain-ul-Abdin",
+  creator: "Muhammad Zain-ul-Abdin, SOUHAIL BEN-LHACHEMI",
   keywords:
     "image converter, video converter, audio converter, unlimited image converter, unlimited video converter",
 };
@@ -25,9 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <Toaster/>
-        <main>{children}</main>
+        <NextUiProvider>
+          <NextNavbar />
+          <Toaster />
+          <div className="pt-24 min-h-screen lg:pt-36 2xl:pt-44 container max-w-4xl lg:max-w-6xl 2xl:max-w-7xl">
+            {children}
+          </div>
+        </NextUiProvider>
       </body>
     </html>
   );

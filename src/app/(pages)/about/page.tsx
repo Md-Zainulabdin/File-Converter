@@ -21,7 +21,7 @@ const AboutPage = () => {
           </h2>
           <p>
             Unleash your creativity with our image conversion tool. Whether you
-            need to resize, crop, rotate, or convert formats, we've got you
+            need to resize, crop, rotate, or convert formats, we&apos;ve got you
             covered. From JPEG to PNG, and everything in between, effortlessly
             enhance your visual content.
           </p>
@@ -57,7 +57,7 @@ const AboutPage = () => {
           <p>
             Unlike other services, we believe in empowering your creativity
             without hidden fees or restrictions. You can convert as many images,
-            audio files, and videos as your heart desires, and it won't cost you
+            audio files, and videos as your heart desires, and it won&apos;t cost you
             a dime.
           </p>
         </div>
@@ -68,7 +68,7 @@ const AboutPage = () => {
           </h2>
           <p>
             Access Convertify X from any device with an internet connection.
-            Whether you're on your computer, tablet, or smartphone, you can use
+            Whether you&apos;re on your computer, tablet, or smartphone, you can use
             our platform with ease.
           </p>
         </div>
@@ -100,7 +100,7 @@ const AboutPage = () => {
             📈 Constantly Evolving:
           </h2>
           <p>
-            We're committed to staying ahead of the curve. Expect regular
+            We&apos;re committed to staying ahead of the curve. Expect regular
             updates and new features to keep your multimedia experience fresh
             and exciting.
           </p>
@@ -108,7 +108,7 @@ const AboutPage = () => {
 
         <div className="space-y-2">
           <h2 className="text-xl md:text-2xl font-medium text-gray-700">
-            🌟 It's Free, It's Powerful, It's ConvertifyX:
+            🌟 It&apos;s Free, It&apos;s Powerful, It&apos;s ConvertifyX:
           </h2>
           <p>
             Experience the freedom to convert images, audio, and video without

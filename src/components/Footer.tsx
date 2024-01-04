@@ -19,7 +19,7 @@ export function SiteFooter() {
 
         <Link
           href={"https://www.linkedin.com/in/m-zain-ul-abdin/"}
-          target="_blank"
+          target="_blank "
         >
           <FaLinkedin className="w-5 h-5 text-muted-foreground" />
         </Link>

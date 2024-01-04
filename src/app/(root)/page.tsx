@@ -4,7 +4,7 @@ import React from "react";
 const Home = () => {
   return (
     <div className="space-y-16 pb-8">
-      <div className="hero">
+      <div className="hero pt-12">
         <div className="space-y-6">
           <h1 className="text-3xl text-center font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]">
             Free Unlimited File Converter

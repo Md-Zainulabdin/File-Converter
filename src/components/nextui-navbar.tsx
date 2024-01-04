@@ -51,7 +51,7 @@ export default function NextNavbar() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="/policy-privacy">Privacy & Policy</Link>
+          <Link href="/privacy-policy">Privacy & Policy</Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">

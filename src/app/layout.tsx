@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import NextUiProvider from "@/providers/NextUiProvider";
 import NextNavbar from "@/components/nextui-navbar";
+import { SiteFooter } from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,9 +30,10 @@ export default function RootLayout({
         <NextUiProvider>
           <NextNavbar />
           <Toaster />
-          <div className="pt-24 min-h-screen lg:pt-36 2xl:pt-44 container max-w-4xl lg:max-w-6xl 2xl:max-w-7xl">
+          <div className="pt-24 min-h-screen lg:pt-24 2xl:pt-32 container max-w-4xl lg:max-w-6xl 2xl:max-w-7xl">
             {children}
           </div>
+          <SiteFooter />
         </NextUiProvider>
       </body>
     </html>

@@ -123,13 +123,16 @@ const Dropzone = () => {
     });
 
     setActions(tmp);
-  };
 
+    
+  };
+  
   const deleteAction = (action: Action): void => {
     setActions(actions.filter((elt) => elt !== action));
     setFiles(files.filter((elt) => elt.name !== action.file_name));
   };
-
+  
+  // console.log(actions);
   const download = (action: Action) => {
     const a = document.createElement("a");
     a.style.display = "none";
@@ -154,7 +157,7 @@ const Dropzone = () => {
             to,
           };
         }
-
+        
         return action;
       })
     );
@@ -170,8 +173,6 @@ const Dropzone = () => {
     for (let action of tmp_actions) {
       try {
         const { url, output } = await convertFile(ffmpegRef.current, action);
-
-        console.log(output);
         
         tmp_actions = tmp_actions.map((elt) =>
           elt === action

@@ -6,7 +6,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Button,
   NavbarMenuToggle,
   NavbarMenu,
@@ -15,6 +14,7 @@ import {
 import { FiGithub } from "react-icons/fi";
 import { Chip } from "@nextui-org/react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function NextNavbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -94,7 +94,6 @@ export default function NextNavbar() {
               }
               className="w-full text-muted-foreground"
               href="#"
-              size="lg"
             >
               {item}
             </Link>

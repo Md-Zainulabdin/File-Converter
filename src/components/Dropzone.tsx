@@ -9,7 +9,7 @@ import { LuFileSymlink } from "react-icons/lu";
 import { HiOutlineDownload } from "react-icons/hi";
 
 import React, { useState, useEffect, useRef } from "react";
-import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { FFmpeg } from "@ffmpeg/ffmpeg";
 
 // ui components
 import { Skeleton } from "@/components/ui/skeleton";
@@ -74,14 +74,13 @@ const extensions = {
 };
 
 const Dropzone = () => {
-
   const ffmpegRef = useRef<any>(null);
   const [isHover, setIsHover] = useState<boolean>(false);
   const [files, setFiles] = useState<Array<any>>([]);
   const [actions, setActions] = useState<Action[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [defaultValues, setDefaultValues] = useState<string>("video");
-  const [selcted, setSelected] = useState<string>("...");
+  const [selected, setSelected] = useState<string>("...");
   const [isDone, setIsDone] = useState<boolean>(false);
   const [isCoverting, setIsConverting] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -123,15 +122,13 @@ const Dropzone = () => {
     });
 
     setActions(tmp);
-
-    
   };
-  
+
   const deleteAction = (action: Action): void => {
     setActions(actions.filter((elt) => elt !== action));
     setFiles(files.filter((elt) => elt.name !== action.file_name));
   };
-  
+
   // console.log(actions);
   const download = (action: Action) => {
     const a = document.createElement("a");
@@ -148,8 +145,11 @@ const Dropzone = () => {
   };
 
   const updateAction = (file_name: String, to: String) => {
+
     setActions(
       actions.map((action): Action => {
+        // console.log(action.file_name);
+        
         if (action.file_name === file_name) {
           console.log("FOUND");
           return {
@@ -157,7 +157,7 @@ const Dropzone = () => {
             to,
           };
         }
-        
+
         return action;
       })
     );
@@ -173,7 +173,7 @@ const Dropzone = () => {
     for (let action of tmp_actions) {
       try {
         const { url, output } = await convertFile(ffmpegRef.current, action);
-        
+
         tmp_actions = tmp_actions.map((elt) =>
           elt === action
             ? {
@@ -299,15 +299,16 @@ const Dropzone = () => {
                 <span>Convert to</span>
                 <Select
                   onValueChange={(value) => {
+
                     if (extensions.audio.includes(value)) {
                       setDefaultValues("audio");
                     } else if (extensions.video.includes(value)) {
                       setDefaultValues("video");
                     }
-                    setSelected(value);
+                    // setSelected(value);
                     updateAction(action.file_name, value);
                   }}
-                  value={selcted}
+                  // value={selected}
                 >
                   <SelectTrigger className="w-32 outline-none focus:outline-none focus:ring-0 text-center text-gray-600 bg-gray-50 text-md font-medium">
                     <SelectValue placeholder="..." />
@@ -414,7 +415,7 @@ const Dropzone = () => {
               size="lg"
               disabled={!isReady || isCoverting}
               className="rounded-xl font-semibold relative py-4 text-md flex items-center w-44"
-                onClick={convert}
+              onClick={convert}
             >
               {isCoverting ? (
                 <span className="animate-spin text-lg">

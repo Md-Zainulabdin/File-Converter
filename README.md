@@ -1,7 +1,7 @@
 <div align="center">
   <br />
     <a href="https://convertifyx.vercel.app/" target="_blank">
-      <img src="./public/asset/project 2.jpg" style="border-radius: 10px" alt="Project Banner">
+      <img src="./public/images/project 2.jpg" style="border-radius: 10px" alt="Project Banner">
     </a>
   <br />
 
